@@ -26,7 +26,7 @@ Load balancing ensures that the application will be highly available, in additio
 - Load Balancers works as a revere proxy which in terms they are the public facing rather then exposing servers directly and also load balancer only communicates on the didcated front end ports and back end ports to the Web Servers which in terms addes layer of secuirty. 
 - Jumpbox is the Server/Host which is ideally the only box exposed to the internet rather then Production Server which then can be attacked from the Internet. If we want to take Security bit more further we can create a seperate DMZ Network and keep Jumpbox over there and then allow any interacation to the internal servers via more tighter Access Control List on the Firewall.
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the _____ and system _____.
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the system logs and system metrics.
 - **Filebeat** - Monitors Log Files and File System Changes
 - **Metricbeat** - Monitors CPU Usage, Disk IO, Network IO, Memory
 
@@ -185,7 +185,7 @@ SSH into the control node and follow the steps below:
 
  ```
 
- Also we specify in our **filebeat-playbook.yaml** where to intall the agent, and playbook will pickup information from the **/etc/ansible/hosts** file 
+ Also we specify in our **filebeat-playbook.yml** where to intall the agent, and playbook will pickup information from the **/etc/ansible/hosts** file 
 
  ```bash
 ---
@@ -212,9 +212,9 @@ SSH into the control node and follow the steps below:
  
  whole setup requires below steps after virtual machine setup is done and Network security group is configured.
 
-  1. Setup Jumpbox with Ansible Docker Container 
-  2. Setup ELK Server with ELK Docker Container with the necessary ports etc. using Ansible file which is run from the Docker Contianer on the Jumpbox 
-  3. Install filebeat and metricbeat on both Web-1 and Web-2 VM and run the metrics to ELK Server
+  1.   Setup Jumpbox with Ansible Docker Container 
+  2.   Setup ELK Server with ELK Docker Container with the necessary ports etc. using Ansible   file which is run from the Docker Contianer on the Jumpbox 
+  3.   nstall filebeat and metricbeat on both Web-1 and Web-2 VM and run the metrics to ELK Server
 
 
 
@@ -378,6 +378,8 @@ Make sure you are in /etc/ansible directory within your Docker Container and run
 before we run Playbook for installation of Filebeat and Metricbeat we need to run below command while in /etc/ansible directory within docker contianer while on Jumpbox VM 
 
 ### **FOR FILEBEAT CONFIGURATION FILE AND YML FILE SETUP AND INSTALL**
+
+Make sure you are back in the Ansible Docker Container on your Jumpboxand run below command to donwload configuration file
 ```bash
 curl https://gist.githubusercontent.com/slape/5cc350109583af6cbe577bbcc0710c93/raw/eca603b72586fbe148c11f9c87bf96a63cb25760/Filebeat >> /etc/ansible/filebeat-config.yml
 ```
@@ -466,6 +468,8 @@ host: "10.2.0.4:5601"
 
 ### **FOR METRICBEAT CONFIGURAITON AND YML FILE SETUP AND INSTALL**
 
+Make sure you are back in the Ansible Docker Container on your Jumpboxand run below command to donwload configuration file
+
 ```bash
 curl https://gist.githubusercontent.com/slape/58541585cc1886d2e26cd8be557ce04c/raw/0ce2c7e744c54513616966affb5e9d96f5e12f73/metricbeat > /etc/ansible/metricbeat-config.yml
 ```
@@ -532,3 +536,4 @@ curl https://gist.githubusercontent.com/slape/58541585cc1886d2e26cd8be557ce04c/r
        ansible-playbook metricbeat-playbook.yml
 
 
+Afer you have run both 
